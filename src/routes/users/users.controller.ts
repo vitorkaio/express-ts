@@ -30,7 +30,7 @@ export const setUser = async (req: Request, res: Response): Promise<Response> =>
     user.password = undefined // Remove o password da resposta
     return ResponseSuccess(res, Codes.CREATE, user)
   } catch (error) {
-    return ResponseFail(res, Codes.CONFLICT, error)
+    return ResponseFail(res, Codes.ERROR, error)
   }
 }
 
@@ -43,7 +43,7 @@ export const updateUser = async (req: Request, res: Response): Promise<Response>
       const user = await User.findById(req.params.id)
       return ResponseSuccess(res, Codes.OK, user)
     } else {
-      return ResponseFail(res, Codes.NOT_FOUND, {})
+      return ResponseFail(res, Codes.NOT_FOUND, null)
     }
   } catch (error) {
     return ResponseFail(res, Codes.ERROR, error)
@@ -58,7 +58,7 @@ export const updatePatchUser = async (req: Request, res: Response): Promise<Resp
     if (user) {
       return ResponseSuccess(res, Codes.OK, user)
     } else {
-      return ResponseFail(res, Codes.NOT_FOUND, {})
+      return ResponseFail(res, Codes.NOT_FOUND, null)
     }
   } catch (error) {
     return ResponseFail(res, Codes.ERROR, error)
@@ -72,7 +72,7 @@ export const deleteUser = async (req: Request, res: Response): Promise<Response>
     if (user) {
       return ResponseSuccess(res, Codes.OK, user)
     } else {
-      return ResponseFail(res, Codes.NOT_FOUND, {})
+      return ResponseFail(res, Codes.NOT_FOUND, null)
     }
   } catch (error) {
     return ResponseFail(res, Codes.ERROR, error)

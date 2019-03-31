@@ -16,10 +16,16 @@ export const ResponseSuccess = (res: Response, code: number, data: {}): Response
   })
 }
 
-export const ResponseFail = (res: Response, code: number, error: {}): Response => {
+export const ResponseFail = (res: Response, code: number, err: Error | {}): Response => {
+  const listErrors: {}[] = []
+  if (err instanceof Error) {
+    for (const key in err['errors']) {
+      listErrors.push(err['errors'][key].message)
+    }
+  }
   return res.status(code).json({
     msg: 'fail',
     code,
-    data: error
+    data: listErrors.length === 0 ? err : listErrors
   })
 }

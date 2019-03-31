@@ -24,14 +24,28 @@ app.use(cors())
 mongoose.connect(DB_URL, {
   useNewUrlParser: true,
   useCreateIndex: true
+}).then(() => {
+  // Verifica se o mongo está conectado.
+  app.use((req: express.Request, res: express.Response, next: express.NextFunction): void => {
+    if (mongoose.connection.readyState !== 1) {
+      res.status(500).json({
+        'code': 500,
+        'msg': 'database disconnect'
+      })
+    }
+    return next()
+  })
+
+  // Routes
+  app.use('/feed', FeedsRoutes)
+  app.use('/users', UsersRoutes)
+
+  // middleware para erros.
+  const erros: Fails = new Fails()
+  app.use(erros.errorsStatus)
+}).catch(() => {
+  console.log('database disconnect')
+  process.exit(1)
 })
-
-// Routes
-app.use('/feed', FeedsRoutes)
-app.use('/users', UsersRoutes)
-
-// middleware para erros.
-const erros: Fails = new Fails()
-app.use(erros.errorsStatus)
 
 export default app
