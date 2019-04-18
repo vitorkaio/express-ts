@@ -1,7 +1,7 @@
 import { Response, Request } from 'express'
-import { ResponseSuccess, ResponseFail } from './response/response'
+import { ResponseSuccess, ResponseFail } from '../response/response'
 import { User, UserI } from './users.model'
-import { Codes } from './response/codes'
+import { Codes } from '../response/codes'
 
 // Retorna todos os usuários cadastrados.
 export const getUsers = async (req: Request, res: Response): Promise<Response> => {
@@ -37,8 +37,8 @@ export const setUser = async (req: Request, res: Response): Promise<Response> =>
 // Atualiza um documento.
 export const updateUser = async (req: Request, res: Response): Promise<Response> => {
   try {
-    // const options = { overwrite: true } // indica para o mongoose para atualiza o doc inteiro.
-    const data = await User.updateOne({ _id: req.params.id }, req.body)
+    const options = { overwrite: true, runValidators: true } // indica para o mongoose para atualiza o doc inteiro.
+    const data = await User.updateOne({ _id: req.params.id }, req.body, { ...options })
     if (data.n) { // n === 1 é pq o doc foi encontrado, caso contrário será 0
       const user = await User.findById(req.params.id)
       return ResponseSuccess(res, Codes.OK, user)
@@ -53,7 +53,9 @@ export const updateUser = async (req: Request, res: Response): Promise<Response>
 // Atualiza parcialmente um documento
 export const updatePatchUser = async (req: Request, res: Response): Promise<Response> => {
   try {
-    const options = { new: true } // retorna o doc com os campos atualizados.
+    // new: retorna o doc com os campos atualizados.
+    // runValidators: dispara os validators e os middlwares.
+    const options = { new: true, runValidators: true }
     const user = await User.findByIdAndUpdate(req.params.id, req.body, options)
     if (user) {
       return ResponseSuccess(res, Codes.OK, user)
