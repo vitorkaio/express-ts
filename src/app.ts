@@ -8,6 +8,8 @@ import { DB_URL } from './env'
 
 import FeedsRoutes from './routes/feed'
 import UsersRoutes from './routes/users/users.route'
+import RestaurantsRoutes from './routes/restaurants/restaurants.route'
+import ReviewsRoutes from './routes/reviews/reviews.route'
 import Fails from './routes/errors'
 
 const app = express()
@@ -39,6 +41,8 @@ mongoose.connect(DB_URL, {
   // Routes
   app.use('/feed', FeedsRoutes)
   app.use('/users', UsersRoutes)
+  app.use('/restaurants', RestaurantsRoutes)
+  app.use('/reviews', ReviewsRoutes)
 
   // middleware para erros.
   const erros: Fails = new Fails()

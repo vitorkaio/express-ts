@@ -1,24 +1,24 @@
-import * as express from 'express'
-import { getUsers, getUserId, setUser, updateUser, updatePatchUser, deleteUser } from './users.controller'
+import { Router } from 'express'
+import * as userController from './users.controller'
 
-const router = express.Router()
+const router = Router()
 
 // GET /users
-router.get('/', getUsers)
+router.get('/', userController.getUsers)
 
 // GET /users/:id
-router.get('/:id', getUserId)
+router.get('/:id', userController.getUserId)
 
 // POST /users
-router.post('/', setUser)
+router.post('/', userController.setUser)
 
 // PUT /users
-router.put('/:id', updateUser)
+router.put('/:id', userController.updateUser)
 
 // PATCH /users
-router.patch('/:id', updatePatchUser)
+router.patch('/:id', userController.updatePatchUser)
 
 // DELETE /users
-router.delete('/:id', deleteUser)
+router.delete('/:id', userController.deleteUser)
 
 export default router
